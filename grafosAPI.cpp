@@ -13,7 +13,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <vector>
 
@@ -28,7 +27,6 @@ struct Grafo{
 	int verticeInicial = 0;
 };
 
-fstream arquivo;
 /**/
 Grafo getGrafo(Grafo grafo);
 Grafo getDigrafo(Grafo grafo);
@@ -41,22 +39,11 @@ vector<int> hierholzer(Grafo* index, int vertice, vector<int> caminho, int arest
  * 
  */
 int main(int argc, char** argv) {
-	
-	string fullpath = "//home//tornado//Documents//Grafos TP01//usb.in";
 
     string linha;
 	Grafo grafo;
-	//cout << "Digite o nome do arquivo:";
-	//getline(cin, name);
-	arquivo.open(fullpath);
-	if ( !arquivo.is_open()) {                 
-      	cout <<" Failed to open" << endl;
-   	}
-   	else {
-      cout <<"Opened OK" << endl;
-   	}
 	
-	getline(arquivo, linha);
+	getline(cin, linha);
 	cout << linha << endl;
 	if (linha.find("0") != -1){
 		grafo = getGrafo(grafo);
@@ -67,17 +54,16 @@ int main(int argc, char** argv) {
 	//calculaGrau(grafo, grafo.vertices);
 	//arestaExiste(grafo, grafo.vertices);
 	//totalArestas(grafo);
-    arquivo.close();
 	return 0;
 }
 
 Grafo getGrafo(Grafo grafo){
 	
-	string linha;
+	string linha, fim;
 	try {
-		getline(arquivo, linha);
+		getline(cin, linha);
 		grafo.vertices = stoi(linha);
-		getline(arquivo, linha);
+		getline(cin, linha);
 		grafo.verticeInicial = stoi(linha);
 		//int grafo[grafo.vertices][grafo.vertices] = {};	
 	
@@ -86,8 +72,8 @@ Grafo getGrafo(Grafo grafo){
 			grafo.matriz.push_back(coluna);
 		}
 	
-		while(arquivo.eof() == false){
-			getline(arquivo, linha);
+		getline(cin, linha);
+		while(linha.compare(fim) != 0){
 			cout << linha << endl;
 			int origem = 0;
 			int destino = 0;
@@ -98,6 +84,8 @@ Grafo getGrafo(Grafo grafo){
 			//cout << origem << " " << destino << " " << peso << endl;
 			grafo.matriz[origem][destino] = peso;
 			grafo.matriz[destino][origem] = peso;
+			fim = linha;
+			getline(cin, linha);
 		}
 	
 		for (int x = 0; x < grafo.vertices; x++){
@@ -113,8 +101,9 @@ Grafo getGrafo(Grafo grafo){
 }
 
 Grafo getDigrafo(Grafo grafo){
-    string linha;
-	getline(arquivo, linha);
+
+	string linha, fim;
+	getline(cin, linha);
 	//int grafo[grafo.vertices][grafo.vertices] = {};	
 	try {
 		grafo.vertices = stoi(linha);
@@ -123,8 +112,8 @@ Grafo getDigrafo(Grafo grafo){
 			grafo.matriz.push_back(coluna);
 		}
 	
-		while(arquivo.eof() == false){
-			getline(arquivo, linha);
+		getline(cin, linha);
+		while(linha.compare(fim) != 0){
 			cout << linha << endl;
 			int origem = 0;
 			int destino = 0;
@@ -134,6 +123,8 @@ Grafo getDigrafo(Grafo grafo){
 			peso = stoi(linha.substr(4));
 			//cout << origem << " " << destino << " " << peso << endl;
 			grafo.matriz[origem][destino] = peso;
+			linha=fim;
+			getline(cin, linha);
 		}
 	
 		for (int x = 0; x < grafo.vertices; x++){
